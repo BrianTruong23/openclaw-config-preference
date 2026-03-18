@@ -7,6 +7,8 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 ## What This Applies
 
 - Enables elevated runtime commands for my Telegram user ID.
+- Switches the main tool profile to `coding`.
+- Sets `tools.exec.security = "full"`.
 - Sets `tools.exec.ask = "off"` for `main` and `coding-agent`.
 - Syncs a patched `spawn-coding-agent` skill.
 - Optionally marks a repo path as trusted in `~/.codex/config.toml`.
@@ -38,6 +40,7 @@ After bootstrapping, OpenClaw should:
 
 - use the patched `spawn-coding-agent` skill
 - stop asking for OpenClaw exec approval in the main coding workflow
+- allow the main OpenClaw agent to create and modify files more freely
 - be allowed to run elevated commands from Telegram for the configured sender
 - avoid Codex's interactive repo trust prompt for repos that were pre-trusted
 - launch Codex in highest-autonomy mode for trusted repos
