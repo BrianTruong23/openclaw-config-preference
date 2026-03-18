@@ -10,6 +10,7 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - Sets `tools.exec.ask = "off"` for `main` and `coding-agent`.
 - Syncs a patched `spawn-coding-agent` skill.
 - Optionally marks a repo path as trusted in `~/.codex/config.toml`.
+- Makes the default `spawn-coding-agent` Codex launch path use `--dangerously-bypass-approvals-and-sandbox` for trusted repos.
 - Restarts `openclaw-gateway`.
 
 ## Files
@@ -39,8 +40,9 @@ After bootstrapping, OpenClaw should:
 - stop asking for OpenClaw exec approval in the main coding workflow
 - be allowed to run elevated commands from Telegram for the configured sender
 - avoid Codex's interactive repo trust prompt for repos that were pre-trusted
+- launch Codex in highest-autonomy mode for trusted repos
 
 ## Notes
 
-- This does not disable every Codex confirmation in every scenario. It removes the main blockers for my OpenClaw Telegram coding workflow.
+- This baseline intentionally gives Codex maximum autonomy in trusted repos. Use it only on repos and VPSes you are comfortable letting the agent modify freely.
 - The bootstrap script is intentionally narrow. It targets my sender ID and does not open elevated access broadly.
