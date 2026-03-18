@@ -35,6 +35,7 @@ raw = config_path.read_text()
 data = json.loads(raw)
 
 tools = data.setdefault("tools", {})
+tools["profile"] = "coding"
 elevated = tools.setdefault("elevated", {})
 elevated["enabled"] = True
 allow_from = elevated.setdefault("allowFrom", {})
@@ -42,6 +43,10 @@ telegram = allow_from.setdefault("telegram", [])
 for token in (sender_id, f"telegram:{sender_id}"):
     if token not in telegram:
         telegram.append(token)
+exec_global = tools.setdefault("exec", {})
+exec_global["security"] = "full"
+exec_global.setdefault("applyPatch", {})["enabled"] = True
+exec_global.setdefault("applyPatch", {})["workspaceOnly"] = True
 
 agents = data.setdefault("agents", {}).setdefault("list", [])
 seen_ids = set()
