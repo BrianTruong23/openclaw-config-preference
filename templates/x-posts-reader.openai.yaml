@@ -1,0 +1,4 @@
+interface:
+  display_name: "X Posts Reader"
+  short_description: "Read public X posts with X API recent search"
+  default_prompt: "Use $x-posts-reader to search public X posts by query."
