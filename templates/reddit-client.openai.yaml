@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reddit Client"
+  short_description: "Search Reddit and submit posts with env-based OAuth"
+  default_prompt: "Use $reddit-client to search Reddit posts or submit a post to a subreddit."
