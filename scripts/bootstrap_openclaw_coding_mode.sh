@@ -39,9 +39,11 @@ SSH_OPTS=(-o BatchMode=yes -i "${HOME}/.ssh/id_ed25519" -o IdentitiesOnly=yes -o
 DEFAULT_CLAWHUB_SKILLS=(
   "agent-browser-clawdbot"
   "agent-daily-planner"
+  "agent-swarm"
   "agent-team-orchestration"
   "self-reflection"
   "joko-moltbook"
+  "tweet-writer"
   "n8n"
   "clawtoclaw"
 )
