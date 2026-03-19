@@ -37,6 +37,8 @@ DEFAULT_CLAWHUB_SKILLS=(
   "self-reflection"
   "joko-moltbook"
   "gog"
+  "n8n"
+  "clawtoclaw"
 )
 FORCED_CLAWHUB_SKILLS=(
   "agent-orchestrator"
