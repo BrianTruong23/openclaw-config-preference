@@ -14,6 +14,7 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - Enables Telegram session-based exec approvals.
 - Installs `gh` (GitHub CLI).
 - Installs `gws` (Google Workspace CLI).
+- Installs `gws-openclaw`, a wrapper that reuses the OpenClaw Google token for `gws`.
 - Syncs a patched `spawn-coding-agent` skill.
 - Syncs the native `google-drive-docs` skill and helper script.
 - Installs the `gdrive-doc` wrapper, `gws`, and Python dependencies for Google Drive, Docs, Sheets, and Slides.
@@ -26,6 +27,7 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 
 - `scripts/bootstrap_openclaw_coding_mode.sh`
 - `scripts/gdrive_doc_remote.py`
+- `scripts/gws_openclaw.sh`
 - `templates/google-drive-docs.SKILL.md`
 - `templates/google-drive-docs.openai.yaml`
 - `templates/spawn-coding-agent.SKILL.md`
@@ -60,6 +62,7 @@ After bootstrapping, OpenClaw should:
 - have `gh` installed and available for GitHub issue/PR workflows
 - have the native `google-drive-docs` skill available through `gdrive-doc`
 - have `gws` available for lower-level Google Workspace API calls
+- have `gws-openclaw` available so `gws` can reuse the OpenClaw Google auth state
 - be able to create Google Docs, Sheets, Slides, and Drive uploads when `/root/.config/openclaw/google-drive/client_secrets.json` and `token.json` are present
 
 ## Notes

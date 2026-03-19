@@ -11,10 +11,12 @@ SKILL_DST="/root/.openclaw/skills/spawn-coding-agent/SKILL.md"
 GDRIVE_SKILL_SRC="${ROOT_DIR}/templates/google-drive-docs.SKILL.md"
 GDRIVE_SKILL_YAML_SRC="${ROOT_DIR}/templates/google-drive-docs.openai.yaml"
 GDRIVE_HELPER_SRC="${ROOT_DIR}/scripts/gdrive_doc_remote.py"
+GWS_WRAPPER_SRC="${ROOT_DIR}/scripts/gws_openclaw.sh"
 GDRIVE_SKILL_DIR="/root/.openclaw/skills/google-drive-docs"
 GDRIVE_SKILL_DST="${GDRIVE_SKILL_DIR}/SKILL.md"
 GDRIVE_SKILL_YAML_DST="${GDRIVE_SKILL_DIR}/agents/openai.yaml"
 GDRIVE_HELPER_DST="${GDRIVE_SKILL_DIR}/bin/gdrive_doc.py"
+GWS_WRAPPER_DST="/usr/local/bin/gws-openclaw"
 CONFIG_PATH="/root/.openclaw/openclaw.json"
 CODEX_CONFIG_PATH="/root/.codex/config.toml"
 SERVICE_ENV_PATH="/root/.config/openclaw/openclaw.env"
@@ -34,6 +36,7 @@ ssh "${SSH_OPTS[@]}" "${HOST}" "mkdir -p ${GDRIVE_SKILL_DIR}/agents ${GDRIVE_SKI
 scp "${SSH_OPTS[@]}" "${GDRIVE_SKILL_SRC}" "${HOST}:${GDRIVE_SKILL_DST}"
 scp "${SSH_OPTS[@]}" "${GDRIVE_SKILL_YAML_SRC}" "${HOST}:${GDRIVE_SKILL_YAML_DST}"
 scp "${SSH_OPTS[@]}" "${GDRIVE_HELPER_SRC}" "${HOST}:${GDRIVE_HELPER_DST}"
+scp "${SSH_OPTS[@]}" "${GWS_WRAPPER_SRC}" "${HOST}:${GWS_WRAPPER_DST}"
 
 echo "Installing Google Drive skill runtime on ${HOST}..."
 ssh "${SSH_OPTS[@]}" "${HOST}" "
@@ -44,7 +47,7 @@ ssh "${SSH_OPTS[@]}" "${HOST}" "
   ${GDRIVE_SKILL_DIR}/.venv/bin/pip install google-api-python-client google-auth google-auth-oauthlib &&
   chmod +x ${GDRIVE_HELPER_DST} &&
   printf '%s\n' '#!/bin/sh' 'exec ${GDRIVE_SKILL_DIR}/.venv/bin/python ${GDRIVE_HELPER_DST} \"\$@\"' > /usr/local/bin/gdrive-doc &&
-  chmod +x /usr/local/bin/gdrive-doc
+  chmod +x /usr/local/bin/gdrive-doc ${GWS_WRAPPER_DST}
 "
 
 echo "Applying OpenClaw coding workflow settings on ${HOST}..."
