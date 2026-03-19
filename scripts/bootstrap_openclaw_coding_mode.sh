@@ -10,7 +10,11 @@ SKILL_SRC="${ROOT_DIR}/templates/spawn-coding-agent.SKILL.md"
 SKILL_DST="/root/.openclaw/skills/spawn-coding-agent/SKILL.md"
 CONFIG_PATH="/root/.openclaw/openclaw.json"
 CODEX_CONFIG_PATH="/root/.codex/config.toml"
+SERVICE_ENV_PATH="/root/.config/openclaw/openclaw.env"
 SSH_OPTS=(-o BatchMode=yes -i "${HOME}/.ssh/id_ed25519" -o IdentitiesOnly=yes -o PasswordAuthentication=no)
+
+echo "Installing GitHub CLI on ${HOST}..."
+ssh "${SSH_OPTS[@]}" "${HOST}" 'apt-get update && apt-get install -y gh'
 
 echo "Syncing spawn-coding-agent skill to ${HOST}..."
 scp "${SSH_OPTS[@]}" "${SKILL_SRC}" "${HOST}:${SKILL_DST}"
@@ -21,6 +25,7 @@ ssh "${SSH_OPTS[@]}" "${HOST}" \
   REPO_PATH="${REPO_PATH}" \
   CONFIG_PATH="${CONFIG_PATH}" \
   CODEX_CONFIG_PATH="${CODEX_CONFIG_PATH}" \
+  SERVICE_ENV_PATH="${SERVICE_ENV_PATH}" \
   'python3 - <<'"'"'PY'"'"'
 import json
 import os
@@ -30,6 +35,7 @@ sender_id = os.environ["SENDER_ID"]
 repo_path = os.environ.get("REPO_PATH", "").strip()
 config_path = Path(os.environ["CONFIG_PATH"])
 codex_config_path = Path(os.environ["CODEX_CONFIG_PATH"])
+service_env_path = Path(os.environ["SERVICE_ENV_PATH"])
 
 raw = config_path.read_text()
 data = json.loads(raw)
@@ -47,6 +53,10 @@ exec_global = tools.setdefault("exec", {})
 exec_global["security"] = "full"
 exec_global.setdefault("applyPatch", {})["enabled"] = True
 exec_global.setdefault("applyPatch", {})["workspaceOnly"] = True
+approvals = data.setdefault("approvals", {})
+approvals_exec = approvals.setdefault("exec", {})
+approvals_exec["enabled"] = True
+approvals_exec["mode"] = "session"
 
 agents = data.setdefault("agents", {}).setdefault("list", [])
 seen_ids = set()
@@ -72,10 +82,16 @@ if repo_path:
         block = f'\n{marker}\ntrust_level = "trusted"\n'
         codex_config_path.write_text(text + block)
 
+gh_ready = False
+if service_env_path.exists():
+    env_text = service_env_path.read_text()
+    gh_ready = "GITHUB_TOKEN=" in env_text and "GITHUB_TOKEN=\n" not in env_text and "GITHUB_TOKEN=" != env_text.strip()
+
 print(json.dumps({
     "config_backup": str(backup),
     "telegram_allow_from": telegram,
     "repo_trusted": repo_path or None,
+    "gh_uses_service_env_token": gh_ready,
 }, indent=2))
 PY'
 
@@ -84,5 +100,7 @@ ssh "${SSH_OPTS[@]}" "${HOST}" 'systemctl --user restart openclaw-gateway && sle
 
 echo
 echo "Done."
+echo "GitHub CLI auth note:"
+echo "  gh will use GITHUB_TOKEN from /root/.config/openclaw/openclaw.env when OpenClaw or a sourced shell runs it."
 echo "Usage:"
 echo "  $(basename "$0") [root@host] [telegram_sender_id] [/optional/repo/path]"
