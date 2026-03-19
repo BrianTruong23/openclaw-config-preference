@@ -13,9 +13,10 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - Sets `coding-agent` to the valid OpenClaw model `openrouter/google/gemini-2.5-flash`.
 - Enables Telegram session-based exec approvals.
 - Installs `gh` (GitHub CLI).
+- Installs `gws` (Google Workspace CLI).
 - Syncs a patched `spawn-coding-agent` skill.
 - Syncs the native `google-drive-docs` skill and helper script.
-- Installs the `gdrive-doc` wrapper and Python dependencies for Google Drive, Docs, Sheets, and Slides.
+- Installs the `gdrive-doc` wrapper, `gws`, and Python dependencies for Google Drive, Docs, Sheets, and Slides.
 - Optionally marks a repo path as trusted in `~/.codex/config.toml`.
 - Makes `spawn-coding-agent` use the real `openclaw agent --agent coding-agent` path first.
 - Keeps raw Codex CLI and `codex-tmux` as fallback paths when explicitly needed.
@@ -58,6 +59,7 @@ After bootstrapping, OpenClaw should:
 - keep raw Codex CLI available as a fallback for trusted repos
 - have `gh` installed and available for GitHub issue/PR workflows
 - have the native `google-drive-docs` skill available through `gdrive-doc`
+- have `gws` available for lower-level Google Workspace API calls
 - be able to create Google Docs, Sheets, Slides, and Drive uploads when `/root/.config/openclaw/google-drive/client_secrets.json` and `token.json` are present
 
 ## Notes
