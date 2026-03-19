@@ -66,10 +66,15 @@ for agent in agents:
     if agent_id in {"main", "coding-agent"}:
         exec_cfg = agent.setdefault("tools", {}).setdefault("exec", {})
         exec_cfg["ask"] = "off"
+    if agent_id == "coding-agent":
+        agent["model"] = "openrouter/google/gemini-2.5-flash"
 
 for missing_id in ("main", "coding-agent"):
     if missing_id not in seen_ids:
-        agents.append({"id": missing_id, "tools": {"exec": {"ask": "off"}}})
+        item = {"id": missing_id, "tools": {"exec": {"ask": "off"}}}
+        if missing_id == "coding-agent":
+            item["model"] = "openrouter/google/gemini-2.5-flash"
+        agents.append(item)
 
 backup = config_path.with_name("openclaw.json.bak-bootstrap-coding-mode")
 backup.write_text(json.dumps(json.loads(raw), indent=2) + "\n")
@@ -92,6 +97,7 @@ print(json.dumps({
     "telegram_allow_from": telegram,
     "repo_trusted": repo_path or None,
     "gh_uses_service_env_token": gh_ready,
+    "coding_agent_model": "openrouter/google/gemini-2.5-flash",
 }, indent=2))
 PY'
 

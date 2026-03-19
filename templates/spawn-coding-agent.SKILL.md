@@ -6,7 +6,7 @@ metadata:
     "openclaw":
       {
         "emoji": "🧩",
-        "requires": { "bins": ["codex", "codex-tmux", "tmux"] },
+        "requires": { "bins": ["openclaw", "codex", "codex-tmux", "tmux"] },
         "always": true
       },
   }
@@ -22,7 +22,7 @@ This OpenClaw runtime exposes the native tools:
 - `process` for polling, logging, and interacting with background sessions
 
 Do not say the coding tool is unavailable just because there is no `bash` tool. In this runtime, `exec` is the correct tool.
-For long-running Codex work, prefer the existing `codex-tmux` wrapper over raw background `codex exec` so the session stays inspectable.
+Prefer the real OpenClaw `coding-agent` first. Use Codex CLI only as a fallback when the user explicitly wants Codex CLI behavior or the OpenClaw coding-agent path is unavailable.
 
 ## Repo Rules
 
@@ -41,6 +41,30 @@ exec:
 ```
 
 ## Preferred Pattern
+
+Prefer the actual OpenClaw sub-agent:
+
+```text
+exec:
+  command: openclaw agent --agent coding-agent --json --timeout 1800 --message 'Work in /path/to/repo. First cd there mentally, inspect the git state, then do this task: Your task here'
+  workdir: /path/to/repo
+```
+
+The JSON response includes a real coding-agent session id in:
+
+```text
+result.meta.agentMeta.sessionId
+```
+
+If you need to inspect the underlying OpenClaw session log:
+
+```text
+exec:
+  command: sed -n '1,200p' /root/.openclaw/agents/coding-agent/sessions/<session-id>.jsonl
+  workdir: /path/to/repo
+```
+
+## Secondary Pattern
 
 Prefer a named tmux session per repo. Use a short stable session name such as `codex-centralized-dashboard`.
 
@@ -76,7 +100,7 @@ exec:
   workdir: /path/to/repo
 ```
 
-## Fallback Pattern
+## Last-Resort Fallback Pattern
 
 Foreground one-shot:
 
@@ -115,7 +139,7 @@ Work on a specific repo:
 ```text
 Use exec with:
 - workdir: /root/projects/my-repo
-- command: codex-tmux start --session codex-my-repo --workdir /root/projects/my-repo --command "codex exec --dangerously-bypass-approvals-and-sandbox 'Add tests for the API client and commit the changes'"
+- command: openclaw agent --agent coding-agent --json --timeout 1800 --message 'Work in /root/projects/my-repo. Inspect the repo, add tests for the API client, and commit the changes.'
 ```
 
 Review a repo without editing:
@@ -138,9 +162,9 @@ exec:
 ## Behavior
 
 - Tell the user which repo path you are using.
-- Treat the trusted target repo as a high-autonomy workspace and prefer `codex exec --dangerously-bypass-approvals-and-sandbox` so the coding agent does not stop for routine approval prompts.
-- For long-running tasks, prefer `codex-tmux start` and report the tmux session name, not just a generic process id.
-- After launching, always capture output at least once and summarize what Codex is doing right now.
-- If the session is still running, capture fresh output before telling the user it is "still working".
-- Only use raw background `codex exec` when `codex-tmux` is unavailable.
+- Prefer `openclaw agent --agent coding-agent` so the work lands in the real OpenClaw coding-agent session store.
+- Report the real coding-agent session id from the JSON response when available.
+- If you inspect a coding-agent session, read its `.jsonl` file and summarize the latest assistant output or error instead of guessing.
+- Treat the trusted target repo as a high-autonomy workspace and only fall back to `codex exec --dangerously-bypass-approvals-and-sandbox` when you intentionally want raw Codex CLI behavior.
+- Use `codex-tmux` only as a fallback observability path for Codex CLI, not as the primary "coding-agent" implementation.
 - If the repo path is missing, ask for the exact path or repo URL.
