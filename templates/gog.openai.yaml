@@ -1,0 +1,4 @@
+interface:
+  display_name: "Google Workspace"
+  short_description: "Send Gmail and manage Calendar with gws-openclaw"
+  default_prompt: "Use $gog to check Gmail, send email, or manage Google Calendar with gws-openclaw."

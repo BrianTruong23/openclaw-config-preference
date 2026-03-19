@@ -38,6 +38,8 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - `templates/clawhub-skills.openai.yaml`
 - `templates/google-drive-docs.SKILL.md`
 - `templates/google-drive-docs.openai.yaml`
+- `templates/gog.SKILL.md`
+- `templates/gog.openai.yaml`
 - `templates/openclaw-workspace-AGENTS.md`
 - `templates/spawn-coding-agent.SKILL.md`
 
@@ -72,6 +74,7 @@ After bootstrapping, OpenClaw should:
 - have the native `google-drive-docs` skill available through `gdrive-doc`
 - have `gws` available for lower-level Google Workspace API calls
 - have `gws-openclaw` available so `gws` can reuse the OpenClaw Google auth state
+- have a managed `gog` skill that uses `gws-openclaw` instead of `gogcli`
 - have `clawhub` and `openclaw-skillhub` available for skill search/install/update
 - have a managed `clawhub-skills` skill inside OpenClaw
 - have `agent-browser-clawdbot`, `agent-daily-planner`, `agent-team-orchestration`, `self-reflection`, `joko-moltbook`, `gog`, `n8n`, and `clawtoclaw` installed by default
