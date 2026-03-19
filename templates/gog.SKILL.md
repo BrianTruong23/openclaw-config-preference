@@ -29,5 +29,9 @@ Rules
 - Confirm before sending email or creating calendar events unless the user explicitly asked for that exact action.
 - For relative dates like "tomorrow at 3pm", convert to an exact RFC3339 timestamp before calling `calendar +insert`.
 - Prefer the `+send`, `+triage`, `+read`, `+agenda`, and `+insert` helpers over lower-level raw API commands.
+- Never use `gws schema ...`, `gws-openclaw schema ...`, `gws calendar events list`, `gws-openclaw calendar events list`, or other raw schema-introspection / low-level calendar listing commands for this skill.
+- If the task is "list my next calendar events", use exactly `gws-openclaw calendar +agenda --format table`.
+- If the task is "send an email", use exactly `gws-openclaw gmail +send ...`.
+- Do not inspect command schemas or ask `gws` for function metadata unless the user explicitly asks about the CLI itself.
 - If auth fails, report that `gws-openclaw` auth is unavailable. Do not switch to unrelated tools or invent a different installation path.
 - Do not tell the user to install Homebrew for this skill on the VPS. This setup is Linux-based and already uses `gws-openclaw`.
