@@ -6,7 +6,7 @@ metadata:
     "openclaw":
       {
         "emoji": "🧩",
-        "requires": { "bins": ["codex"] },
+        "requires": { "bins": ["codex", "codex-tmux", "tmux"] },
         "always": true
       },
   }
@@ -22,6 +22,7 @@ This OpenClaw runtime exposes the native tools:
 - `process` for polling, logging, and interacting with background sessions
 
 Do not say the coding tool is unavailable just because there is no `bash` tool. In this runtime, `exec` is the correct tool.
+For long-running Codex work, prefer the existing `codex-tmux` wrapper over raw background `codex exec` so the session stays inspectable.
 
 ## Repo Rules
 
@@ -39,7 +40,43 @@ exec:
   workdir: /path/to/repo
 ```
 
-## Codex Pattern
+## Preferred Pattern
+
+Prefer a named tmux session per repo. Use a short stable session name such as `codex-centralized-dashboard`.
+
+Start the session:
+
+```text
+exec:
+  command: codex-tmux start --session codex-my-repo --workdir /path/to/repo --command "codex exec --dangerously-bypass-approvals-and-sandbox 'Your task here'"
+  workdir: /path/to/repo
+```
+
+Check whether it still exists:
+
+```text
+exec:
+  command: codex-tmux list
+  workdir: /path/to/repo
+```
+
+Capture the current output:
+
+```text
+exec:
+  command: codex-tmux capture --session codex-my-repo --start-line -200
+  workdir: /path/to/repo
+```
+
+Stop it if needed:
+
+```text
+exec:
+  command: codex-tmux stop --session codex-my-repo
+  workdir: /path/to/repo
+```
+
+## Fallback Pattern
 
 Foreground one-shot:
 
@@ -78,9 +115,7 @@ Work on a specific repo:
 ```text
 Use exec with:
 - workdir: /root/projects/my-repo
-- pty: true
-- background: true
-- command: codex exec --dangerously-bypass-approvals-and-sandbox 'Add tests for the API client and commit the changes'
+- command: codex-tmux start --session codex-my-repo --workdir /root/projects/my-repo --command "codex exec --dangerously-bypass-approvals-and-sandbox 'Add tests for the API client and commit the changes'"
 ```
 
 Review a repo without editing:
@@ -104,6 +139,8 @@ exec:
 
 - Tell the user which repo path you are using.
 - Treat the trusted target repo as a high-autonomy workspace and prefer `codex exec --dangerously-bypass-approvals-and-sandbox` so the coding agent does not stop for routine approval prompts.
-- For background runs, report the session id or that a background coding run was started.
-- Use `process log` to monitor instead of guessing whether the agent is done.
+- For long-running tasks, prefer `codex-tmux start` and report the tmux session name, not just a generic process id.
+- After launching, always capture output at least once and summarize what Codex is doing right now.
+- If the session is still running, capture fresh output before telling the user it is "still working".
+- Only use raw background `codex exec` when `codex-tmux` is unavailable.
 - If the repo path is missing, ask for the exact path or repo URL.
