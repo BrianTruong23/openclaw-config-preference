@@ -16,6 +16,7 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - Installs `gws` (Google Workspace CLI).
 - Installs `clawhub` (ClawHub CLI).
 - Installs `gws-openclaw`, a wrapper that reuses the OpenClaw Google token for `gws`.
+- Materializes `~/.config/gws/credentials.json` from the OpenClaw Google token when present so native `gws` Drive calls work without extra setup.
 - Installs `openclaw-skillhub`, a wrapper that targets `/root/.openclaw/skills`.
 - Syncs a patched `spawn-coding-agent` skill.
 - Syncs a managed `clawhub-skills` installer skill.
@@ -74,6 +75,7 @@ After bootstrapping, OpenClaw should:
 - have the native `google-drive-docs` skill available through `gdrive-doc`
 - have `gws` available for lower-level Google Workspace API calls
 - have `gws-openclaw` available so `gws` can reuse the OpenClaw Google auth state
+- have native `gws` Drive calls work through `/root/.config/gws/credentials.json` synthesized from the OpenClaw token when available
 - have a managed `gog` skill that uses `gws-openclaw` instead of `gogcli`
 - have `clawhub` and `openclaw-skillhub` available for skill search/install/update
 - have a managed `clawhub-skills` skill inside OpenClaw
@@ -88,3 +90,4 @@ After bootstrapping, OpenClaw should:
 - `gh` will work through the `GITHUB_TOKEN` loaded from `/root/.config/openclaw/openclaw.env`; this avoids requiring interactive `gh auth login` in the normal OpenClaw service flow.
 - Google Drive OAuth client secrets should live at `/root/.config/openclaw/google-drive/client_secrets.json`.
 - Google Drive access tokens should live at `/root/.config/openclaw/google-drive/token.json`.
+- Gmail and Calendar still require a broader native `gws auth login` if the OpenClaw token was not authorized with those scopes.

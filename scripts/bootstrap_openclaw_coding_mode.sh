@@ -89,9 +89,28 @@ echo "Installing Google Drive skill runtime on ${HOST}..."
 ssh "${SSH_OPTS[@]}" "${HOST}" "
   apt-get update &&
   apt-get install -y python3-venv &&
+  mkdir -p /root/.config/gws &&
   python3 -m venv ${GDRIVE_SKILL_DIR}/.venv &&
   ${GDRIVE_SKILL_DIR}/.venv/bin/pip install --upgrade pip &&
   ${GDRIVE_SKILL_DIR}/.venv/bin/pip install google-api-python-client google-auth google-auth-oauthlib &&
+  python3 - <<'PY'
+import json
+from pathlib import Path
+
+token_file = Path('/root/.config/openclaw/google-drive/token.json')
+credentials_file = Path('/root/.config/gws/credentials.json')
+
+if token_file.exists():
+    data = json.loads(token_file.read_text())
+    credentials = {
+        'type': 'authorized_user',
+        'client_id': data['client_id'],
+        'client_secret': data['client_secret'],
+        'refresh_token': data['refresh_token'],
+    }
+    credentials_file.write_text(json.dumps(credentials))
+    credentials_file.chmod(0o600)
+PY
   chmod +x ${GDRIVE_HELPER_DST} &&
   printf '%s\n' '#!/bin/sh' 'exec ${GDRIVE_SKILL_DIR}/.venv/bin/python ${GDRIVE_HELPER_DST} \"\$@\"' > /usr/local/bin/gdrive-doc &&
   chmod +x /usr/local/bin/gdrive-doc ${GWS_WRAPPER_DST} ${CLAWHUB_WRAPPER_DST}
