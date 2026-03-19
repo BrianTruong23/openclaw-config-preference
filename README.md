@@ -20,7 +20,7 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - Syncs a patched `spawn-coding-agent` skill.
 - Syncs a managed `clawhub-skills` installer skill.
 - Installs default ClawHub skills:
-  `agent-browser-clawdbot`, `agent-daily-planner`, `agent-orchestrator`, `evolver`, `self-reflection`, `joko-moltbook`, `gog`, `n8n`, and `clawtoclaw`
+  `agent-browser-clawdbot`, `agent-daily-planner`, `self-reflection`, `joko-moltbook`, `gog`, `n8n`, and `clawtoclaw`
 - Syncs the native `google-drive-docs` skill and helper script.
 - Installs the `gdrive-doc` wrapper, `gws`, and Python dependencies for Google Drive, Docs, Sheets, and Slides.
 - Optionally marks a repo path as trusted in `~/.codex/config.toml`.
@@ -74,7 +74,7 @@ After bootstrapping, OpenClaw should:
 - have `gws-openclaw` available so `gws` can reuse the OpenClaw Google auth state
 - have `clawhub` and `openclaw-skillhub` available for skill search/install/update
 - have a managed `clawhub-skills` skill inside OpenClaw
-- have `agent-browser-clawdbot`, `agent-daily-planner`, `agent-orchestrator`, `evolver`, `self-reflection`, `joko-moltbook`, `gog`, `n8n`, and `clawtoclaw` installed by default
+- have `agent-browser-clawdbot`, `agent-daily-planner`, `self-reflection`, `joko-moltbook`, `gog`, `n8n`, and `clawtoclaw` installed by default
 - have workspace-level "verify before reporting" guardrails to reduce hallucinated success claims
 - be able to create Google Docs, Sheets, Slides, and Drive uploads when `/root/.config/openclaw/google-drive/client_secrets.json` and `token.json` are present
 
@@ -85,5 +85,3 @@ After bootstrapping, OpenClaw should:
 - `gh` will work through the `GITHUB_TOKEN` loaded from `/root/.config/openclaw/openclaw.env`; this avoids requiring interactive `gh auth login` in the normal OpenClaw service flow.
 - Google Drive OAuth client secrets should live at `/root/.config/openclaw/google-drive/client_secrets.json`.
 - Google Drive access tokens should live at `/root/.config/openclaw/google-drive/token.json`.
-- `agent-orchestrator` is currently installed with `--force` because ClawHub flags it as suspicious. Review it before relying on it broadly.
-- `evolver` is currently installed with `--force` because ClawHub flags it as suspicious. Review it before relying on it broadly.

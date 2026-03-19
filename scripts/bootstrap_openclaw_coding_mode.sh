@@ -41,8 +41,6 @@ DEFAULT_CLAWHUB_SKILLS=(
   "clawtoclaw"
 )
 FORCED_CLAWHUB_SKILLS=(
-  "agent-orchestrator"
-  "evolver"
 )
 
 echo "Installing GitHub CLI on ${HOST}..."
