@@ -1,0 +1,4 @@
+interface:
+  display_name: "Google Workspace"
+  short_description: "Email, calendar, and Drive via stable gws-openclaw helpers"
+  default_prompt: "Use $google-workspace to check Gmail, send email, list calendar events, or create calendar events."

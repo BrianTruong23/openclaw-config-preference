@@ -21,7 +21,8 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - Syncs a patched `spawn-coding-agent` skill.
 - Syncs a managed `clawhub-skills` installer skill.
 - Installs default ClawHub skills:
-  `agent-browser-clawdbot`, `agent-daily-planner`, `agent-team-orchestration`, `self-reflection`, `joko-moltbook`, `gog`, `n8n`, and `clawtoclaw`
+  `agent-browser-clawdbot`, `agent-daily-planner`, `agent-team-orchestration`, `self-reflection`, `joko-moltbook`, `n8n`, and `clawtoclaw`
+- Syncs a managed `google-workspace` skill that constrains the agent to stable `gws-openclaw` helper commands.
 - Syncs the native `google-drive-docs` skill and helper script.
 - Installs the `gdrive-doc` wrapper, `gws`, and Python dependencies for Google Drive, Docs, Sheets, and Slides.
 - Optionally marks a repo path as trusted in `~/.codex/config.toml`.
@@ -39,8 +40,8 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - `templates/clawhub-skills.openai.yaml`
 - `templates/google-drive-docs.SKILL.md`
 - `templates/google-drive-docs.openai.yaml`
-- `templates/gog.SKILL.md`
-- `templates/gog.openai.yaml`
+- `templates/google-workspace.SKILL.md`
+- `templates/google-workspace.openai.yaml`
 - `templates/openclaw-workspace-AGENTS.md`
 - `templates/spawn-coding-agent.SKILL.md`
 
@@ -76,10 +77,10 @@ After bootstrapping, OpenClaw should:
 - have `gws` available for lower-level Google Workspace API calls
 - have `gws-openclaw` available so `gws` can reuse the OpenClaw Google auth state
 - have native `gws` Drive calls work through `/root/.config/gws/credentials.json` synthesized from the OpenClaw token when available
-- have a managed `gog` skill that uses `gws-openclaw` instead of `gogcli`
+- have a managed `google-workspace` skill that uses only stable `gws-openclaw` helper commands
 - have `clawhub` and `openclaw-skillhub` available for skill search/install/update
 - have a managed `clawhub-skills` skill inside OpenClaw
-- have `agent-browser-clawdbot`, `agent-daily-planner`, `agent-team-orchestration`, `self-reflection`, `joko-moltbook`, `gog`, `n8n`, and `clawtoclaw` installed by default
+- have `agent-browser-clawdbot`, `agent-daily-planner`, `agent-team-orchestration`, `self-reflection`, `joko-moltbook`, `n8n`, and `clawtoclaw` installed by default
 - have workspace-level "verify before reporting" guardrails to reduce hallucinated success claims
 - be able to create Google Docs, Sheets, Slides, and Drive uploads when `/root/.config/openclaw/google-drive/client_secrets.json` and `token.json` are present
 
