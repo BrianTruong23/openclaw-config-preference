@@ -15,6 +15,9 @@ GWS_WRAPPER_SRC="${ROOT_DIR}/scripts/gws_openclaw.sh"
 X_POSTS_READER_SRC="${ROOT_DIR}/templates/x-posts-reader.SKILL.md"
 X_POSTS_READER_YAML_SRC="${ROOT_DIR}/templates/x-posts-reader.openai.yaml"
 X_POSTS_READER_LOGIC_SRC="${ROOT_DIR}/scripts/x_posts_reader_logic.py"
+REDDIT_CLIENT_SKILL_SRC="${ROOT_DIR}/templates/reddit-client.SKILL.md"
+REDDIT_CLIENT_SKILL_YAML_SRC="${ROOT_DIR}/templates/reddit-client.openai.yaml"
+REDDIT_CLIENT_LOGIC_SRC="${ROOT_DIR}/scripts/reddit_client_logic.py"
 WORKSPACE_AGENTS_SRC="${ROOT_DIR}/templates/openclaw-workspace-AGENTS.md"
 CLAWHUB_WRAPPER_SRC="${ROOT_DIR}/scripts/openclaw_skillhub.sh"
 CLAWHUB_SKILL_SRC="${ROOT_DIR}/templates/clawhub-skills.SKILL.md"
@@ -39,6 +42,10 @@ X_POSTS_READER_DIR="/root/.openclaw/skills/x-posts-reader"
 X_POSTS_READER_DST="${X_POSTS_READER_DIR}/SKILL.md"
 X_POSTS_READER_YAML_DST="${X_POSTS_READER_DIR}/agents/openai.yaml"
 X_POSTS_READER_LOGIC_DST="${X_POSTS_READER_DIR}/x_posts_reader_logic.py"
+REDDIT_CLIENT_DIR="/root/.openclaw/skills/reddit-client"
+REDDIT_CLIENT_DST="${REDDIT_CLIENT_DIR}/SKILL.md"
+REDDIT_CLIENT_YAML_DST="${REDDIT_CLIENT_DIR}/agents/openai.yaml"
+REDDIT_CLIENT_LOGIC_DST="${REDDIT_CLIENT_DIR}/reddit_client_logic.py"
 CONFIG_PATH="/root/.openclaw/openclaw.json"
 CODEX_CONFIG_PATH="/root/.codex/config.toml"
 SERVICE_ENV_PATH="/root/.config/openclaw/openclaw.env"
@@ -90,6 +97,10 @@ ssh "${SSH_OPTS[@]}" "${HOST}" "mkdir -p ${X_POSTS_READER_DIR}/agents"
 scp "${SSH_OPTS[@]}" "${X_POSTS_READER_SRC}" "${HOST}:${X_POSTS_READER_DST}"
 scp "${SSH_OPTS[@]}" "${X_POSTS_READER_YAML_SRC}" "${HOST}:${X_POSTS_READER_YAML_DST}"
 scp "${SSH_OPTS[@]}" "${X_POSTS_READER_LOGIC_SRC}" "${HOST}:${X_POSTS_READER_LOGIC_DST}"
+ssh "${SSH_OPTS[@]}" "${HOST}" "mkdir -p ${REDDIT_CLIENT_DIR}/agents"
+scp "${SSH_OPTS[@]}" "${REDDIT_CLIENT_SKILL_SRC}" "${HOST}:${REDDIT_CLIENT_DST}"
+scp "${SSH_OPTS[@]}" "${REDDIT_CLIENT_SKILL_YAML_SRC}" "${HOST}:${REDDIT_CLIENT_YAML_DST}"
+scp "${SSH_OPTS[@]}" "${REDDIT_CLIENT_LOGIC_SRC}" "${HOST}:${REDDIT_CLIENT_LOGIC_DST}"
 ssh "${SSH_OPTS[@]}" "${HOST}" "mkdir -p ${GOOGLE_WORKSPACE_SKILL_DIR}/agents"
 scp "${SSH_OPTS[@]}" "${GOOGLE_WORKSPACE_SKILL_SRC}" "${HOST}:${GOOGLE_WORKSPACE_SKILL_DST}"
 scp "${SSH_OPTS[@]}" "${GOOGLE_WORKSPACE_SKILL_YAML_SRC}" "${HOST}:${GOOGLE_WORKSPACE_SKILL_YAML_DST}"
@@ -128,7 +139,7 @@ if token_file.exists():
     credentials_file.write_text(json.dumps(credentials))
     credentials_file.chmod(0o600)
 PY
-  chmod +x ${GDRIVE_HELPER_DST} ${X_POSTS_READER_LOGIC_DST} &&
+  chmod +x ${GDRIVE_HELPER_DST} ${X_POSTS_READER_LOGIC_DST} ${REDDIT_CLIENT_LOGIC_DST} &&
   printf '%s\n' '#!/bin/sh' 'exec ${GDRIVE_SKILL_DIR}/.venv/bin/python ${GDRIVE_HELPER_DST} \"\$@\"' > /usr/local/bin/gdrive-doc &&
   chmod +x /usr/local/bin/gdrive-doc ${GWS_WRAPPER_DST} ${CLAWHUB_WRAPPER_DST}
 "
