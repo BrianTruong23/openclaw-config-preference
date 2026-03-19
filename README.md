@@ -28,6 +28,7 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - Syncs a managed `mastodon-client` skill for Mastodon search/timeline reads and posting using a local auth JSON file.
 - Syncs the native `google-drive-docs` skill and helper script.
 - Syncs a workspace-visible `AVAILABLE_SKILLS.md` index so the main agent can see important managed skills such as `mastodon-client`.
+- Syncs workspace `AGENTS.md` guardrails that forbid storing secrets in workspace files, encourage tight per-agent tool scopes, and reinforce `SOUL.md` hard limits for prompt-safety.
 - Installs the `gdrive-doc` wrapper, `gws`, and Python dependencies for Google Drive, Docs, Sheets, and Slides.
 - Optionally marks a repo path as trusted in `~/.codex/config.toml`.
 - Makes `spawn-coding-agent` use the real `openclaw agent --agent coding-agent` path first.

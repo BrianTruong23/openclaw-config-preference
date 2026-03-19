@@ -44,3 +44,14 @@ Add these rules to reduce false progress reports and tool-result hallucinations.
 - For vulnerability scans, name the scanner actually used.
 - If a scanner is missing or unauthenticated, say so plainly.
 - Do not present placeholder findings as real findings.
+
+## Secrets / Permissions / Prompt Safety
+
+- Never put API keys, passwords, or tokens in workspace files. These are plain-text files and must not contain secrets.
+- Use environment variables or the server's secret manager for secrets.
+- When documenting secret usage in workspace docs such as `TOOLS.md`, reference secrets as `$ENV_VAR_NAME`, never inline the real value.
+- Scope tool permissions tightly. If an agent does not need `exec` or another powerful tool, do not enable it.
+- Prefer per-agent tool restrictions in the OpenClaw config instead of broad global enablement.
+- Review `AGENTS.md` carefully before production because weak workflow instructions can cause unintended actions.
+- Test workflow changes in a sandboxed environment before relying on them in production.
+- Put meaningful hard limits in `SOUL.md`. Explicit `never do X` rules in `SOUL.md` are a last line of defense against prompt injection and unexpected inputs.
