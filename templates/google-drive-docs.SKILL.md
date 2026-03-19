@@ -7,7 +7,7 @@ metadata:
     "openclaw":
       {
         "emoji": "📄",
-        "requires": { "bins": ["gdrive-doc", "gws"] },
+        "requires": { "bins": ["gdrive-doc", "gws", "gws-openclaw"] },
         "always": true
       },
   }
@@ -18,7 +18,7 @@ metadata:
 Use this skill whenever the user asks to create, upload, or organize files in Google Drive or Google Workspace.
 
 Prefer `gdrive-doc` for the common high-level actions in this skill.
-Use `gws` when you need a lower-level Google Workspace API operation that `gdrive-doc` does not cover.
+Use `gws-openclaw` when you need a lower-level Google Workspace API operation that `gdrive-doc` does not cover, because it reuses the OpenClaw Google token.
 
 Default behavior:
 
@@ -120,6 +120,12 @@ Or omit the folder:
 gdrive-doc upload-file --file-path /path/to/local/file.pdf
 ```
 
+Lower-level Drive API example through the OpenClaw token wrapper:
+
+```bash
+gws-openclaw drive files list --params '{"pageSize":1}'
+```
+
 ## Argument Mapping
 
 Map user requests to command arguments like this:
@@ -153,3 +159,4 @@ Examples to send the bot:
 - OAuth client secrets live at `/root/.config/openclaw/google-drive/client_secrets.json`.
 - Access tokens are stored at `/root/.config/openclaw/google-drive/token.json` after authorization.
 - The helper creates missing folders under `/My Drive/...` automatically.
+- `gws-openclaw` refreshes and reuses the OpenClaw Google token before calling `gws`.
