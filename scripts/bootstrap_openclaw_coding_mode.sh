@@ -44,6 +44,7 @@ DEFAULT_CLAWHUB_SKILLS=(
   "self-reflection"
   "joko-moltbook"
   "tweet-writer"
+  "us-stock-analysis"
   "n8n"
   "clawtoclaw"
 )
