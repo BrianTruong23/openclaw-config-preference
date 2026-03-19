@@ -23,6 +23,9 @@ SSH_OPTS=(-o BatchMode=yes -i "${HOME}/.ssh/id_ed25519" -o IdentitiesOnly=yes -o
 echo "Installing GitHub CLI on ${HOST}..."
 ssh "${SSH_OPTS[@]}" "${HOST}" 'apt-get update && apt-get install -y gh'
 
+echo "Installing Google Workspace CLI on ${HOST}..."
+ssh "${SSH_OPTS[@]}" "${HOST}" 'npm install -g @googleworkspace/cli'
+
 echo "Syncing spawn-coding-agent skill to ${HOST}..."
 scp "${SSH_OPTS[@]}" "${SKILL_SRC}" "${HOST}:${SKILL_DST}"
 

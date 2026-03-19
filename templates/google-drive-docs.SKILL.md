@@ -7,7 +7,7 @@ metadata:
     "openclaw":
       {
         "emoji": "📄",
-        "requires": { "bins": ["gdrive-doc"] },
+        "requires": { "bins": ["gdrive-doc", "gws"] },
         "always": true
       },
   }
@@ -16,6 +16,9 @@ metadata:
 # Google Drive Docs
 
 Use this skill whenever the user asks to create, upload, or organize files in Google Drive or Google Workspace.
+
+Prefer `gdrive-doc` for the common high-level actions in this skill.
+Use `gws` when you need a lower-level Google Workspace API operation that `gdrive-doc` does not cover.
 
 Default behavior:
 
