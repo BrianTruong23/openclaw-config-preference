@@ -27,6 +27,10 @@ Example intent:
 Use google-drive-docs for Google Docs, Sheets, Slides, and Drive uploads.
 Default folder: /My Drive/spring_2026/OpenClaw
 
+## Security Auditor
+
+Use security-auditor for code security review, OWASP Top 10 audits, authentication-flow review, CORS/CSP checks, secrets handling, input validation, SQL injection prevention, and XSS protection.
+
 ## Reforce Session
 
 Use reforce-session to clear the cached Telegram DM session so the next message rebuilds available_skills.

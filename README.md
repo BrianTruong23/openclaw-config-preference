@@ -21,7 +21,7 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - Syncs a patched `spawn-coding-agent` skill.
 - Syncs a managed `clawhub-skills` installer skill.
 - Installs default ClawHub skills:
-  `agent-browser-clawdbot`, `agent-daily-planner`, `agent-swarm`, `agent-team-orchestration`, `self-reflection`, `joko-moltbook`, `tweet-writer`, `us-stock-analysis`, `csv-pipeline`, `automation-workflows`, `free-ride`, `mac-tts`, `n8n`, and `clawtoclaw`
+  `agent-browser-clawdbot`, `agent-daily-planner`, `agent-swarm`, `agent-team-orchestration`, `self-reflection`, `joko-moltbook`, `tweet-writer`, `us-stock-analysis`, `security-auditor`, `csv-pipeline`, `automation-workflows`, `free-ride`, `mac-tts`, `n8n`, and `clawtoclaw`
 - Syncs a managed `google-workspace` skill that constrains the agent to stable `gws-openclaw` helper commands.
 - Syncs a managed `x-posts-reader` skill that reads `X_BEARER_TOKEN` from the environment instead of embedding secrets in code.
 - Syncs a managed `reddit-client` skill for Reddit search and post submission using env-based OAuth credentials.
@@ -99,7 +99,7 @@ After bootstrapping, OpenClaw should:
 - have a managed `x-posts-reader` skill that uses `X_BEARER_TOKEN` from the service environment
 - have `clawhub` and `openclaw-skillhub` available for skill search/install/update
 - have a managed `clawhub-skills` skill inside OpenClaw
-- have `agent-browser-clawdbot`, `agent-daily-planner`, `agent-swarm`, `agent-team-orchestration`, `self-reflection`, `joko-moltbook`, `tweet-writer`, `us-stock-analysis`, `csv-pipeline`, `automation-workflows`, `free-ride`, `mac-tts`, `n8n`, and `clawtoclaw` installed by default
+- have `agent-browser-clawdbot`, `agent-daily-planner`, `agent-swarm`, `agent-team-orchestration`, `self-reflection`, `joko-moltbook`, `tweet-writer`, `us-stock-analysis`, `security-auditor`, `csv-pipeline`, `automation-workflows`, `free-ride`, `mac-tts`, `n8n`, and `clawtoclaw` installed by default
 - have workspace-level "verify before reporting" guardrails to reduce hallucinated success claims
 - be able to create Google Docs, Sheets, Slides, and Drive uploads when `/root/.config/openclaw/google-drive/client_secrets.json` and `token.json` are present
 

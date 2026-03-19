@@ -71,6 +71,7 @@ DEFAULT_CLAWHUB_SKILLS=(
   "joko-moltbook"
   "tweet-writer"
   "us-stock-analysis"
+  "security-auditor"
   "csv-pipeline"
   "automation-workflows"
   "free-ride"
