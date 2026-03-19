@@ -1,0 +1,8 @@
+{
+  "base_url": "https://mastodon.example",
+  "client_id": "",
+  "client_secret": "",
+  "redirect_uri": "urn:ietf:wg:oauth:2.0:oob",
+  "scopes": "read write push",
+  "access_token": ""
+}

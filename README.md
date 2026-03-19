@@ -25,6 +25,7 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - Syncs a managed `google-workspace` skill that constrains the agent to stable `gws-openclaw` helper commands.
 - Syncs a managed `x-posts-reader` skill that reads `X_BEARER_TOKEN` from the environment instead of embedding secrets in code.
 - Syncs a managed `reddit-client` skill for Reddit search and post submission using env-based OAuth credentials.
+- Syncs a managed `mastodon-client` skill for Mastodon search/timeline reads and posting using a local auth JSON file.
 - Syncs the native `google-drive-docs` skill and helper script.
 - Installs the `gdrive-doc` wrapper, `gws`, and Python dependencies for Google Drive, Docs, Sheets, and Slides.
 - Optionally marks a repo path as trusted in `~/.codex/config.toml`.
@@ -38,6 +39,7 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - `scripts/gdrive_doc_remote.py`
 - `scripts/gws_openclaw.sh`
 - `scripts/openclaw_skillhub.sh`
+- `scripts/mastodon_client_logic.py`
 - `scripts/reddit_client_logic.py`
 - `scripts/x_posts_reader_logic.py`
 - `templates/clawhub-skills.SKILL.md`
@@ -46,6 +48,9 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - `templates/google-drive-docs.openai.yaml`
 - `templates/google-workspace.SKILL.md`
 - `templates/google-workspace.openai.yaml`
+- `templates/mastodon-client.SKILL.md`
+- `templates/mastodon-client.openai.yaml`
+- `templates/mastodon_auth.template.json`
 - `templates/reddit-client.SKILL.md`
 - `templates/reddit-client.openai.yaml`
 - `templates/x-posts-reader.SKILL.md`
@@ -87,6 +92,7 @@ After bootstrapping, OpenClaw should:
 - have native `gws` Drive calls work through `/root/.config/gws/credentials.json` synthesized from the OpenClaw token when available
 - have a managed `google-workspace` skill that uses only stable `gws-openclaw` helper commands
 - have a managed `reddit-client` skill that uses `REDDIT_CLIENT_ID`, `REDDIT_CLIENT_SECRET`, and `REDDIT_USER_AGENT`, plus username/password for posting
+- have a managed `mastodon-client` skill that reads Mastodon credentials and access token from `mastodon_auth.json`
 - have a managed `x-posts-reader` skill that uses `X_BEARER_TOKEN` from the service environment
 - have `clawhub` and `openclaw-skillhub` available for skill search/install/update
 - have a managed `clawhub-skills` skill inside OpenClaw
@@ -104,4 +110,5 @@ After bootstrapping, OpenClaw should:
 - Gmail and Calendar still require a broader native `gws auth login` if the OpenClaw token was not authorized with those scopes.
 - `x-posts-reader` still depends on your X developer plan allowing the `/2/tweets/search/recent` endpoint. Correct auth setup does not bypass plan restrictions.
 - Reddit API access for generic OAuth/script apps has become less predictable than Devvit. If `reddit.com/prefs/apps` is unavailable on your account, you may need to use Reddit’s Devvit platform instead of classic app credentials.
+- Mastodon posting requires a user access token. App-level `client_credentials` tokens are not sufficient for creating statuses; official Mastodon docs require a user token with `write:statuses` or broader `write`.
 - `mac-tts` is macOS-specific; it can be installed in the baseline but will not function on a Linux VPS.

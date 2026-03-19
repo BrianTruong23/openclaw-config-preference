@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mastodon Client"
+  short_description: "Query public Mastodon posts and create statuses"
+  default_prompt: "Use $mastodon-client to search Mastodon posts, read public timelines, or create a Mastodon status."

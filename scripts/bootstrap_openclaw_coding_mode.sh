@@ -18,6 +18,10 @@ X_POSTS_READER_LOGIC_SRC="${ROOT_DIR}/scripts/x_posts_reader_logic.py"
 REDDIT_CLIENT_SKILL_SRC="${ROOT_DIR}/templates/reddit-client.SKILL.md"
 REDDIT_CLIENT_SKILL_YAML_SRC="${ROOT_DIR}/templates/reddit-client.openai.yaml"
 REDDIT_CLIENT_LOGIC_SRC="${ROOT_DIR}/scripts/reddit_client_logic.py"
+MASTODON_CLIENT_SKILL_SRC="${ROOT_DIR}/templates/mastodon-client.SKILL.md"
+MASTODON_CLIENT_SKILL_YAML_SRC="${ROOT_DIR}/templates/mastodon-client.openai.yaml"
+MASTODON_CLIENT_LOGIC_SRC="${ROOT_DIR}/scripts/mastodon_client_logic.py"
+MASTODON_AUTH_TEMPLATE_SRC="${ROOT_DIR}/templates/mastodon_auth.template.json"
 WORKSPACE_AGENTS_SRC="${ROOT_DIR}/templates/openclaw-workspace-AGENTS.md"
 CLAWHUB_WRAPPER_SRC="${ROOT_DIR}/scripts/openclaw_skillhub.sh"
 CLAWHUB_SKILL_SRC="${ROOT_DIR}/templates/clawhub-skills.SKILL.md"
@@ -46,6 +50,11 @@ REDDIT_CLIENT_DIR="/root/.openclaw/skills/reddit-client"
 REDDIT_CLIENT_DST="${REDDIT_CLIENT_DIR}/SKILL.md"
 REDDIT_CLIENT_YAML_DST="${REDDIT_CLIENT_DIR}/agents/openai.yaml"
 REDDIT_CLIENT_LOGIC_DST="${REDDIT_CLIENT_DIR}/reddit_client_logic.py"
+MASTODON_CLIENT_DIR="/root/.openclaw/skills/mastodon-client"
+MASTODON_CLIENT_DST="${MASTODON_CLIENT_DIR}/SKILL.md"
+MASTODON_CLIENT_YAML_DST="${MASTODON_CLIENT_DIR}/agents/openai.yaml"
+MASTODON_CLIENT_LOGIC_DST="${MASTODON_CLIENT_DIR}/mastodon_client_logic.py"
+MASTODON_AUTH_TEMPLATE_DST="${MASTODON_CLIENT_DIR}/mastodon_auth.json"
 CONFIG_PATH="/root/.openclaw/openclaw.json"
 CODEX_CONFIG_PATH="/root/.codex/config.toml"
 SERVICE_ENV_PATH="/root/.config/openclaw/openclaw.env"
@@ -101,6 +110,11 @@ ssh "${SSH_OPTS[@]}" "${HOST}" "mkdir -p ${REDDIT_CLIENT_DIR}/agents"
 scp "${SSH_OPTS[@]}" "${REDDIT_CLIENT_SKILL_SRC}" "${HOST}:${REDDIT_CLIENT_DST}"
 scp "${SSH_OPTS[@]}" "${REDDIT_CLIENT_SKILL_YAML_SRC}" "${HOST}:${REDDIT_CLIENT_YAML_DST}"
 scp "${SSH_OPTS[@]}" "${REDDIT_CLIENT_LOGIC_SRC}" "${HOST}:${REDDIT_CLIENT_LOGIC_DST}"
+ssh "${SSH_OPTS[@]}" "${HOST}" "mkdir -p ${MASTODON_CLIENT_DIR}/agents"
+scp "${SSH_OPTS[@]}" "${MASTODON_CLIENT_SKILL_SRC}" "${HOST}:${MASTODON_CLIENT_DST}"
+scp "${SSH_OPTS[@]}" "${MASTODON_CLIENT_SKILL_YAML_SRC}" "${HOST}:${MASTODON_CLIENT_YAML_DST}"
+scp "${SSH_OPTS[@]}" "${MASTODON_CLIENT_LOGIC_SRC}" "${HOST}:${MASTODON_CLIENT_LOGIC_DST}"
+scp "${SSH_OPTS[@]}" "${MASTODON_AUTH_TEMPLATE_SRC}" "${HOST}:${MASTODON_AUTH_TEMPLATE_DST}"
 ssh "${SSH_OPTS[@]}" "${HOST}" "mkdir -p ${GOOGLE_WORKSPACE_SKILL_DIR}/agents"
 scp "${SSH_OPTS[@]}" "${GOOGLE_WORKSPACE_SKILL_SRC}" "${HOST}:${GOOGLE_WORKSPACE_SKILL_DST}"
 scp "${SSH_OPTS[@]}" "${GOOGLE_WORKSPACE_SKILL_YAML_SRC}" "${HOST}:${GOOGLE_WORKSPACE_SKILL_YAML_DST}"
@@ -139,7 +153,7 @@ if token_file.exists():
     credentials_file.write_text(json.dumps(credentials))
     credentials_file.chmod(0o600)
 PY
-  chmod +x ${GDRIVE_HELPER_DST} ${X_POSTS_READER_LOGIC_DST} ${REDDIT_CLIENT_LOGIC_DST} &&
+  chmod +x ${GDRIVE_HELPER_DST} ${X_POSTS_READER_LOGIC_DST} ${REDDIT_CLIENT_LOGIC_DST} ${MASTODON_CLIENT_LOGIC_DST} &&
   printf '%s\n' '#!/bin/sh' 'exec ${GDRIVE_SKILL_DIR}/.venv/bin/python ${GDRIVE_HELPER_DST} \"\$@\"' > /usr/local/bin/gdrive-doc &&
   chmod +x /usr/local/bin/gdrive-doc ${GWS_WRAPPER_DST} ${CLAWHUB_WRAPPER_DST}
 "
