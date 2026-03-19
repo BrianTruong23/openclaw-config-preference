@@ -30,6 +30,7 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - `scripts/gws_openclaw.sh`
 - `templates/google-drive-docs.SKILL.md`
 - `templates/google-drive-docs.openai.yaml`
+- `templates/openclaw-workspace-AGENTS.md`
 - `templates/spawn-coding-agent.SKILL.md`
 
 ## Usage
@@ -63,6 +64,7 @@ After bootstrapping, OpenClaw should:
 - have the native `google-drive-docs` skill available through `gdrive-doc`
 - have `gws` available for lower-level Google Workspace API calls
 - have `gws-openclaw` available so `gws` can reuse the OpenClaw Google auth state
+- have workspace-level "verify before reporting" guardrails to reduce hallucinated success claims
 - be able to create Google Docs, Sheets, Slides, and Drive uploads when `/root/.config/openclaw/google-drive/client_secrets.json` and `token.json` are present
 
 ## Notes
