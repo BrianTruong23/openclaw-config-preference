@@ -14,6 +14,8 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - Enables Telegram session-based exec approvals.
 - Installs `gh` (GitHub CLI).
 - Syncs a patched `spawn-coding-agent` skill.
+- Syncs the native `google-drive-docs` skill and helper script.
+- Installs the `gdrive-doc` wrapper and Python dependencies for Google Drive, Docs, Sheets, and Slides.
 - Optionally marks a repo path as trusted in `~/.codex/config.toml`.
 - Makes `spawn-coding-agent` use the real `openclaw agent --agent coding-agent` path first.
 - Keeps raw Codex CLI and `codex-tmux` as fallback paths when explicitly needed.
@@ -22,6 +24,9 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 ## Files
 
 - `scripts/bootstrap_openclaw_coding_mode.sh`
+- `scripts/gdrive_doc_remote.py`
+- `templates/google-drive-docs.SKILL.md`
+- `templates/google-drive-docs.openai.yaml`
 - `templates/spawn-coding-agent.SKILL.md`
 
 ## Usage
@@ -52,9 +57,13 @@ After bootstrapping, OpenClaw should:
 - run the OpenClaw `coding-agent` on the valid model `openrouter/google/gemini-2.5-flash`
 - keep raw Codex CLI available as a fallback for trusted repos
 - have `gh` installed and available for GitHub issue/PR workflows
+- have the native `google-drive-docs` skill available through `gdrive-doc`
+- be able to create Google Docs, Sheets, Slides, and Drive uploads when `/root/.config/openclaw/google-drive/client_secrets.json` and `token.json` are present
 
 ## Notes
 
 - This baseline intentionally gives Codex maximum autonomy in trusted repos. Use it only on repos and VPSes you are comfortable letting the agent modify freely.
 - The bootstrap script is intentionally narrow. It targets my sender ID and does not open elevated access broadly.
 - `gh` will work through the `GITHUB_TOKEN` loaded from `/root/.config/openclaw/openclaw.env`; this avoids requiring interactive `gh auth login` in the normal OpenClaw service flow.
+- Google Drive OAuth client secrets should live at `/root/.config/openclaw/google-drive/client_secrets.json`.
+- Google Drive access tokens should live at `/root/.config/openclaw/google-drive/token.json`.

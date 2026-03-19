@@ -8,6 +8,13 @@ REPO_PATH="${3:-}"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SKILL_SRC="${ROOT_DIR}/templates/spawn-coding-agent.SKILL.md"
 SKILL_DST="/root/.openclaw/skills/spawn-coding-agent/SKILL.md"
+GDRIVE_SKILL_SRC="${ROOT_DIR}/templates/google-drive-docs.SKILL.md"
+GDRIVE_SKILL_YAML_SRC="${ROOT_DIR}/templates/google-drive-docs.openai.yaml"
+GDRIVE_HELPER_SRC="${ROOT_DIR}/scripts/gdrive_doc_remote.py"
+GDRIVE_SKILL_DIR="/root/.openclaw/skills/google-drive-docs"
+GDRIVE_SKILL_DST="${GDRIVE_SKILL_DIR}/SKILL.md"
+GDRIVE_SKILL_YAML_DST="${GDRIVE_SKILL_DIR}/agents/openai.yaml"
+GDRIVE_HELPER_DST="${GDRIVE_SKILL_DIR}/bin/gdrive_doc.py"
 CONFIG_PATH="/root/.openclaw/openclaw.json"
 CODEX_CONFIG_PATH="/root/.codex/config.toml"
 SERVICE_ENV_PATH="/root/.config/openclaw/openclaw.env"
@@ -18,6 +25,24 @@ ssh "${SSH_OPTS[@]}" "${HOST}" 'apt-get update && apt-get install -y gh'
 
 echo "Syncing spawn-coding-agent skill to ${HOST}..."
 scp "${SSH_OPTS[@]}" "${SKILL_SRC}" "${HOST}:${SKILL_DST}"
+
+echo "Syncing Google Drive skill to ${HOST}..."
+ssh "${SSH_OPTS[@]}" "${HOST}" "mkdir -p ${GDRIVE_SKILL_DIR}/agents ${GDRIVE_SKILL_DIR}/bin"
+scp "${SSH_OPTS[@]}" "${GDRIVE_SKILL_SRC}" "${HOST}:${GDRIVE_SKILL_DST}"
+scp "${SSH_OPTS[@]}" "${GDRIVE_SKILL_YAML_SRC}" "${HOST}:${GDRIVE_SKILL_YAML_DST}"
+scp "${SSH_OPTS[@]}" "${GDRIVE_HELPER_SRC}" "${HOST}:${GDRIVE_HELPER_DST}"
+
+echo "Installing Google Drive skill runtime on ${HOST}..."
+ssh "${SSH_OPTS[@]}" "${HOST}" "
+  apt-get update &&
+  apt-get install -y python3-venv &&
+  python3 -m venv ${GDRIVE_SKILL_DIR}/.venv &&
+  ${GDRIVE_SKILL_DIR}/.venv/bin/pip install --upgrade pip &&
+  ${GDRIVE_SKILL_DIR}/.venv/bin/pip install google-api-python-client google-auth google-auth-oauthlib &&
+  chmod +x ${GDRIVE_HELPER_DST} &&
+  printf '%s\n' '#!/bin/sh' 'exec ${GDRIVE_SKILL_DIR}/.venv/bin/python ${GDRIVE_HELPER_DST} \"\$@\"' > /usr/local/bin/gdrive-doc &&
+  chmod +x /usr/local/bin/gdrive-doc
+"
 
 echo "Applying OpenClaw coding workflow settings on ${HOST}..."
 ssh "${SSH_OPTS[@]}" "${HOST}" \

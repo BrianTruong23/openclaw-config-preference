@@ -1,0 +1,4 @@
+interface:
+  display_name: "Google Drive Docs"
+  short_description: "Create Docs, Sheets, Slides, and uploads"
+  default_prompt: "Use $google-drive-docs to create or upload a file in the default Google Drive folder."
