@@ -46,7 +46,7 @@ Prefer the actual OpenClaw sub-agent:
 
 ```text
 exec:
-  command: openclaw agent --agent coding-agent --json --timeout 1800 --message 'Work in /path/to/repo. First cd there mentally, inspect the git state, then do this task: Your task here'
+  command: openclaw agent --agent coding-agent --json --timeout 1800 --message 'Work only in /path/to/repo. Treat that directory as the source of truth. First inspect the git state there, then do this task: Your task here. Before you claim success, verify any created or modified files from that exact repo path and report the verification output.'
   workdir: /path/to/repo
 ```
 
@@ -61,6 +61,26 @@ If you need to inspect the underlying OpenClaw session log:
 ```text
 exec:
   command: sed -n '1,200p' /root/.openclaw/agents/coding-agent/sessions/<session-id>.jsonl
+  workdir: /path/to/repo
+```
+
+## Shared Filesystem Verification
+
+The coding-agent is not done just because it reported success in its own session. The host repo path must show the changes.
+
+Required checks after any coding-agent run:
+
+- Verify expected files directly from the host repo path with `ls -l`, `stat`, `find`, `sed`, or `git status`.
+- If the task mentioned a specific file such as `requirements.txt`, `.venv`, or `src/app.py`, check that exact path from the host filesystem.
+- If a file is missing from the host repo path, treat the run as not complete even if the coding-agent claimed it wrote the file.
+- Report concrete verification results such as `ls -l /path/to/repo/file.py` or `git status --short`.
+- If verification fails or is ambiguous, say so plainly and continue debugging instead of summarizing the coding-agent's claim as success.
+
+Verification example:
+
+```text
+exec:
+  command: sh -lc 'pwd && git status --short && ls -l requirements.txt .venv 2>/dev/null || true && find . -maxdepth 2 -type f | sed -n "1,40p"'
   workdir: /path/to/repo
 ```
 
@@ -164,6 +184,9 @@ exec:
 - Tell the user which repo path you are using.
 - Prefer `openclaw agent --agent coding-agent` so the work lands in the real OpenClaw coding-agent session store.
 - Report the real coding-agent session id from the JSON response when available.
+- Never treat a coding-agent completion message as proof that files persisted to the shared workspace.
+- After the agent finishes, verify the target repo path from the host before claiming files were created, modified, or runnable.
+- If the task involved a virtual environment or install output, verify the directory or binary exists from the host repo path before reporting success.
 - If you inspect a coding-agent session, read its `.jsonl` file and summarize the latest assistant output or error instead of guessing.
 - Treat the trusted target repo as a high-autonomy workspace and only fall back to `codex exec --dangerously-bypass-approvals-and-sandbox` when you intentionally want raw Codex CLI behavior.
 - Use `codex-tmux` only as a fallback observability path for Codex CLI, not as the primary "coding-agent" implementation.

@@ -11,6 +11,7 @@ Important runtime note:
 - Do not look for a bash tool.
 - Start coding runs with exec.
 - Monitor them with process.
+- Verify created or modified files from the host repo path before reporting success.
 
 Correct pattern:
 - exec with workdir set to the repo path
