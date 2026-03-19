@@ -1,0 +1,4 @@
+interface:
+  display_name: "ClawHub Skills"
+  short_description: "Search and install OpenClaw skills"
+  default_prompt: "Use $clawhub-skills to search for or install an OpenClaw skill."

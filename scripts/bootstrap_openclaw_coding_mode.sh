@@ -13,23 +13,44 @@ GDRIVE_SKILL_YAML_SRC="${ROOT_DIR}/templates/google-drive-docs.openai.yaml"
 GDRIVE_HELPER_SRC="${ROOT_DIR}/scripts/gdrive_doc_remote.py"
 GWS_WRAPPER_SRC="${ROOT_DIR}/scripts/gws_openclaw.sh"
 WORKSPACE_AGENTS_SRC="${ROOT_DIR}/templates/openclaw-workspace-AGENTS.md"
+CLAWHUB_WRAPPER_SRC="${ROOT_DIR}/scripts/openclaw_skillhub.sh"
+CLAWHUB_SKILL_SRC="${ROOT_DIR}/templates/clawhub-skills.SKILL.md"
+CLAWHUB_SKILL_YAML_SRC="${ROOT_DIR}/templates/clawhub-skills.openai.yaml"
 GDRIVE_SKILL_DIR="/root/.openclaw/skills/google-drive-docs"
 GDRIVE_SKILL_DST="${GDRIVE_SKILL_DIR}/SKILL.md"
 GDRIVE_SKILL_YAML_DST="${GDRIVE_SKILL_DIR}/agents/openai.yaml"
 GDRIVE_HELPER_DST="${GDRIVE_SKILL_DIR}/bin/gdrive_doc.py"
 GWS_WRAPPER_DST="/usr/local/bin/gws-openclaw"
+CLAWHUB_WRAPPER_DST="/usr/local/bin/openclaw-skillhub"
+CLAWHUB_SKILL_DIR="/root/.openclaw/skills/clawhub-skills"
+CLAWHUB_SKILL_DST="${CLAWHUB_SKILL_DIR}/SKILL.md"
+CLAWHUB_SKILL_YAML_DST="${CLAWHUB_SKILL_DIR}/agents/openai.yaml"
 WORKSPACE_AGENTS_DST="/root/.openclaw/workspace/AGENTS.md"
 WORKSPACE_CODING_AGENTS_DST="/root/.openclaw/workspace-coding/AGENTS.md"
 CONFIG_PATH="/root/.openclaw/openclaw.json"
 CODEX_CONFIG_PATH="/root/.codex/config.toml"
 SERVICE_ENV_PATH="/root/.config/openclaw/openclaw.env"
 SSH_OPTS=(-o BatchMode=yes -i "${HOME}/.ssh/id_ed25519" -o IdentitiesOnly=yes -o PasswordAuthentication=no)
+DEFAULT_CLAWHUB_SKILLS=(
+  "agent-browser-clawdbot"
+  "agent-daily-planner"
+  "self-reflection"
+  "joko-moltbook"
+  "gog"
+)
+FORCED_CLAWHUB_SKILLS=(
+  "agent-orchestrator"
+  "evolver"
+)
 
 echo "Installing GitHub CLI on ${HOST}..."
 ssh "${SSH_OPTS[@]}" "${HOST}" 'apt-get update && apt-get install -y gh'
 
 echo "Installing Google Workspace CLI on ${HOST}..."
 ssh "${SSH_OPTS[@]}" "${HOST}" 'npm install -g @googleworkspace/cli'
+
+echo "Installing ClawHub CLI on ${HOST}..."
+ssh "${SSH_OPTS[@]}" "${HOST}" 'npm install -g clawhub'
 
 echo "Syncing spawn-coding-agent skill to ${HOST}..."
 scp "${SSH_OPTS[@]}" "${SKILL_SRC}" "${HOST}:${SKILL_DST}"
@@ -42,6 +63,18 @@ scp "${SSH_OPTS[@]}" "${GDRIVE_HELPER_SRC}" "${HOST}:${GDRIVE_HELPER_DST}"
 scp "${SSH_OPTS[@]}" "${GWS_WRAPPER_SRC}" "${HOST}:${GWS_WRAPPER_DST}"
 scp "${SSH_OPTS[@]}" "${WORKSPACE_AGENTS_SRC}" "${HOST}:${WORKSPACE_AGENTS_DST}"
 scp "${SSH_OPTS[@]}" "${WORKSPACE_AGENTS_SRC}" "${HOST}:${WORKSPACE_CODING_AGENTS_DST}"
+ssh "${SSH_OPTS[@]}" "${HOST}" "mkdir -p ${CLAWHUB_SKILL_DIR}/agents"
+scp "${SSH_OPTS[@]}" "${CLAWHUB_WRAPPER_SRC}" "${HOST}:${CLAWHUB_WRAPPER_DST}"
+scp "${SSH_OPTS[@]}" "${CLAWHUB_SKILL_SRC}" "${HOST}:${CLAWHUB_SKILL_DST}"
+scp "${SSH_OPTS[@]}" "${CLAWHUB_SKILL_YAML_SRC}" "${HOST}:${CLAWHUB_SKILL_YAML_DST}"
+
+echo "Installing default ClawHub skills on ${HOST}..."
+for skill in "${DEFAULT_CLAWHUB_SKILLS[@]}"; do
+  ssh "${SSH_OPTS[@]}" "${HOST}" "${CLAWHUB_WRAPPER_DST} install ${skill} --no-input || true"
+done
+for skill in "${FORCED_CLAWHUB_SKILLS[@]}"; do
+  ssh "${SSH_OPTS[@]}" "${HOST}" "${CLAWHUB_WRAPPER_DST} install ${skill} --no-input --force || true"
+done
 
 echo "Installing Google Drive skill runtime on ${HOST}..."
 ssh "${SSH_OPTS[@]}" "${HOST}" "
@@ -52,7 +85,7 @@ ssh "${SSH_OPTS[@]}" "${HOST}" "
   ${GDRIVE_SKILL_DIR}/.venv/bin/pip install google-api-python-client google-auth google-auth-oauthlib &&
   chmod +x ${GDRIVE_HELPER_DST} &&
   printf '%s\n' '#!/bin/sh' 'exec ${GDRIVE_SKILL_DIR}/.venv/bin/python ${GDRIVE_HELPER_DST} \"\$@\"' > /usr/local/bin/gdrive-doc &&
-  chmod +x /usr/local/bin/gdrive-doc ${GWS_WRAPPER_DST}
+  chmod +x /usr/local/bin/gdrive-doc ${GWS_WRAPPER_DST} ${CLAWHUB_WRAPPER_DST}
 "
 
 echo "Applying OpenClaw coding workflow settings on ${HOST}..."
