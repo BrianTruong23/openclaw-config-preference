@@ -23,6 +23,7 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - Installs default ClawHub skills:
   `agent-browser-clawdbot`, `agent-daily-planner`, `agent-swarm`, `agent-team-orchestration`, `self-reflection`, `joko-moltbook`, `tweet-writer`, `us-stock-analysis`, `csv-pipeline`, `automation-workflows`, `free-ride`, `mac-tts`, `n8n`, and `clawtoclaw`
 - Syncs a managed `google-workspace` skill that constrains the agent to stable `gws-openclaw` helper commands.
+- Syncs a managed `x-posts-reader` skill that reads `X_BEARER_TOKEN` from the environment instead of embedding secrets in code.
 - Syncs the native `google-drive-docs` skill and helper script.
 - Installs the `gdrive-doc` wrapper, `gws`, and Python dependencies for Google Drive, Docs, Sheets, and Slides.
 - Optionally marks a repo path as trusted in `~/.codex/config.toml`.
@@ -36,12 +37,15 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - `scripts/gdrive_doc_remote.py`
 - `scripts/gws_openclaw.sh`
 - `scripts/openclaw_skillhub.sh`
+- `scripts/x_posts_reader_logic.py`
 - `templates/clawhub-skills.SKILL.md`
 - `templates/clawhub-skills.openai.yaml`
 - `templates/google-drive-docs.SKILL.md`
 - `templates/google-drive-docs.openai.yaml`
 - `templates/google-workspace.SKILL.md`
 - `templates/google-workspace.openai.yaml`
+- `templates/x-posts-reader.SKILL.md`
+- `templates/x-posts-reader.openai.yaml`
 - `templates/openclaw-workspace-AGENTS.md`
 - `templates/spawn-coding-agent.SKILL.md`
 
@@ -78,6 +82,7 @@ After bootstrapping, OpenClaw should:
 - have `gws-openclaw` available so `gws` can reuse the OpenClaw Google auth state
 - have native `gws` Drive calls work through `/root/.config/gws/credentials.json` synthesized from the OpenClaw token when available
 - have a managed `google-workspace` skill that uses only stable `gws-openclaw` helper commands
+- have a managed `x-posts-reader` skill that uses `X_BEARER_TOKEN` from the service environment
 - have `clawhub` and `openclaw-skillhub` available for skill search/install/update
 - have a managed `clawhub-skills` skill inside OpenClaw
 - have `agent-browser-clawdbot`, `agent-daily-planner`, `agent-swarm`, `agent-team-orchestration`, `self-reflection`, `joko-moltbook`, `tweet-writer`, `us-stock-analysis`, `csv-pipeline`, `automation-workflows`, `free-ride`, `mac-tts`, `n8n`, and `clawtoclaw` installed by default
@@ -92,4 +97,5 @@ After bootstrapping, OpenClaw should:
 - Google Drive OAuth client secrets should live at `/root/.config/openclaw/google-drive/client_secrets.json`.
 - Google Drive access tokens should live at `/root/.config/openclaw/google-drive/token.json`.
 - Gmail and Calendar still require a broader native `gws auth login` if the OpenClaw token was not authorized with those scopes.
+- `x-posts-reader` still depends on your X developer plan allowing the `/2/tweets/search/recent` endpoint. Correct auth setup does not bypass plan restrictions.
 - `mac-tts` is macOS-specific; it can be installed in the baseline but will not function on a Linux VPS.
