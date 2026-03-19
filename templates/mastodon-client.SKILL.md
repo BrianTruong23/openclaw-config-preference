@@ -1,5 +1,5 @@
 openclaw:
-  description: Query public Mastodon posts and create statuses using Mastodon API credentials from a local auth JSON file.
+  description: Query public Mastodon posts and create statuses using Mastodon API credentials from a local auth JSON file. Invoke this skill by the installed skill name mastodon-client. Do not look for repo template paths like openclaw-config-preference/templates/mastodon-client.SKILL.md at runtime; use the installed skill under /root/.openclaw/skills/mastodon-client/SKILL.md.
   emoji: "🐘"
   parameters:
     action:
