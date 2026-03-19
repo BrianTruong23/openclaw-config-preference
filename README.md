@@ -10,12 +10,13 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - Switches the main tool profile to `coding`.
 - Sets `tools.exec.security = "full"`.
 - Sets `tools.exec.ask = "off"` for `main` and `coding-agent`.
+- Sets `coding-agent` to the valid OpenClaw model `openrouter/google/gemini-2.5-flash`.
 - Enables Telegram session-based exec approvals.
 - Installs `gh` (GitHub CLI).
 - Syncs a patched `spawn-coding-agent` skill.
 - Optionally marks a repo path as trusted in `~/.codex/config.toml`.
-- Makes the default `spawn-coding-agent` Codex launch path use `--dangerously-bypass-approvals-and-sandbox` for trusted repos.
-- Makes `spawn-coding-agent` prefer `codex-tmux` session launch and output capture so Telegram gets observable progress instead of a vague background session id.
+- Makes `spawn-coding-agent` use the real `openclaw agent --agent coding-agent` path first.
+- Keeps raw Codex CLI and `codex-tmux` as fallback paths when explicitly needed.
 - Restarts `openclaw-gateway`.
 
 ## Files
@@ -42,13 +43,14 @@ Generic usage:
 After bootstrapping, OpenClaw should:
 
 - use the patched `spawn-coding-agent` skill
+- route coding work into the real OpenClaw `coding-agent` session store
 - stop asking for OpenClaw exec approval in the main coding workflow
 - allow the main OpenClaw agent to create and modify files more freely
 - be allowed to run elevated commands from Telegram for the configured sender
 - route approval-gated exec prompts back into the Telegram session
 - avoid Codex's interactive repo trust prompt for repos that were pre-trusted
-- launch Codex in highest-autonomy mode for trusted repos
-- launch long-running Codex jobs through named `codex-tmux` sessions that can be listed and captured
+- run the OpenClaw `coding-agent` on the valid model `openrouter/google/gemini-2.5-flash`
+- keep raw Codex CLI available as a fallback for trusted repos
 - have `gh` installed and available for GitHub issue/PR workflows
 
 ## Notes
