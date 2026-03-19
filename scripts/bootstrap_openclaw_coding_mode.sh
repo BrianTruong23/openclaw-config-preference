@@ -45,6 +45,10 @@ DEFAULT_CLAWHUB_SKILLS=(
   "joko-moltbook"
   "tweet-writer"
   "us-stock-analysis"
+  "csv-pipeline"
+  "automation-workflows"
+  "free-ride"
+  "mac-tts"
   "n8n"
   "clawtoclaw"
 )

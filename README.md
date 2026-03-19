@@ -21,7 +21,7 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - Syncs a patched `spawn-coding-agent` skill.
 - Syncs a managed `clawhub-skills` installer skill.
 - Installs default ClawHub skills:
-  `agent-browser-clawdbot`, `agent-daily-planner`, `agent-swarm`, `agent-team-orchestration`, `self-reflection`, `joko-moltbook`, `tweet-writer`, `us-stock-analysis`, `n8n`, and `clawtoclaw`
+  `agent-browser-clawdbot`, `agent-daily-planner`, `agent-swarm`, `agent-team-orchestration`, `self-reflection`, `joko-moltbook`, `tweet-writer`, `us-stock-analysis`, `csv-pipeline`, `automation-workflows`, `free-ride`, `mac-tts`, `n8n`, and `clawtoclaw`
 - Syncs a managed `google-workspace` skill that constrains the agent to stable `gws-openclaw` helper commands.
 - Syncs the native `google-drive-docs` skill and helper script.
 - Installs the `gdrive-doc` wrapper, `gws`, and Python dependencies for Google Drive, Docs, Sheets, and Slides.
@@ -80,7 +80,7 @@ After bootstrapping, OpenClaw should:
 - have a managed `google-workspace` skill that uses only stable `gws-openclaw` helper commands
 - have `clawhub` and `openclaw-skillhub` available for skill search/install/update
 - have a managed `clawhub-skills` skill inside OpenClaw
-- have `agent-browser-clawdbot`, `agent-daily-planner`, `agent-swarm`, `agent-team-orchestration`, `self-reflection`, `joko-moltbook`, `tweet-writer`, `us-stock-analysis`, `n8n`, and `clawtoclaw` installed by default
+- have `agent-browser-clawdbot`, `agent-daily-planner`, `agent-swarm`, `agent-team-orchestration`, `self-reflection`, `joko-moltbook`, `tweet-writer`, `us-stock-analysis`, `csv-pipeline`, `automation-workflows`, `free-ride`, `mac-tts`, `n8n`, and `clawtoclaw` installed by default
 - have workspace-level "verify before reporting" guardrails to reduce hallucinated success claims
 - be able to create Google Docs, Sheets, Slides, and Drive uploads when `/root/.config/openclaw/google-drive/client_secrets.json` and `token.json` are present
 
@@ -92,3 +92,4 @@ After bootstrapping, OpenClaw should:
 - Google Drive OAuth client secrets should live at `/root/.config/openclaw/google-drive/client_secrets.json`.
 - Google Drive access tokens should live at `/root/.config/openclaw/google-drive/token.json`.
 - Gmail and Calendar still require a broader native `gws auth login` if the OpenClaw token was not authorized with those scopes.
+- `mac-tts` is macOS-specific; it can be installed in the baseline but will not function on a Linux VPS.
