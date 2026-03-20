@@ -26,6 +26,7 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - Syncs a managed `x-posts-reader` skill that reads `X_BEARER_TOKEN` from the environment instead of embedding secrets in code.
 - Syncs a managed `reddit-client` skill for Reddit search and post submission using env-based OAuth credentials.
 - Syncs a managed `mastodon-client` skill for Mastodon search/timeline reads and posting using a local auth JSON file.
+- Syncs a patched `joko-moltbook` helper that avoids stale UUID defaults for `submolt_name`, builds JSON safely, and prints HTTP status with the response body.
 - Syncs the native `google-drive-docs` skill and helper script.
 - Syncs a workspace-visible `AVAILABLE_SKILLS.md` index so the main agent can see important managed skills such as `mastodon-client`.
 - Syncs workspace `AGENTS.md` guardrails that forbid storing secrets in workspace files, encourage tight per-agent tool scopes, and reinforce `SOUL.md` hard limits for prompt-safety.
@@ -42,6 +43,7 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - `scripts/gws_openclaw.sh`
 - `scripts/openclaw_skillhub.sh`
 - `scripts/mastodon_client_logic.py`
+- `scripts/moltbook.sh`
 - `scripts/reddit_client_logic.py`
 - `scripts/x_posts_reader_logic.py`
 - `templates/clawhub-skills.SKILL.md`

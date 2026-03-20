@@ -22,6 +22,7 @@ MASTODON_CLIENT_SKILL_SRC="${ROOT_DIR}/templates/mastodon-client.SKILL.md"
 MASTODON_CLIENT_SKILL_YAML_SRC="${ROOT_DIR}/templates/mastodon-client.openai.yaml"
 MASTODON_CLIENT_LOGIC_SRC="${ROOT_DIR}/scripts/mastodon_client_logic.py"
 MASTODON_AUTH_TEMPLATE_SRC="${ROOT_DIR}/templates/mastodon_auth.template.json"
+MOLTBOOK_HELPER_SRC="${ROOT_DIR}/scripts/moltbook.sh"
 WORKSPACE_AGENTS_SRC="${ROOT_DIR}/templates/openclaw-workspace-AGENTS.md"
 AVAILABLE_SKILLS_SRC="${ROOT_DIR}/templates/AVAILABLE_SKILLS.md"
 CLAWHUB_WRAPPER_SRC="${ROOT_DIR}/scripts/openclaw_skillhub.sh"
@@ -58,6 +59,7 @@ MASTODON_CLIENT_DST="${MASTODON_CLIENT_DIR}/SKILL.md"
 MASTODON_CLIENT_YAML_DST="${MASTODON_CLIENT_DIR}/agents/openai.yaml"
 MASTODON_CLIENT_LOGIC_DST="${MASTODON_CLIENT_DIR}/mastodon_client_logic.py"
 MASTODON_AUTH_TEMPLATE_DST="${MASTODON_CLIENT_DIR}/mastodon_auth.json"
+MOLTBOOK_HELPER_DST="/root/.openclaw/skills/joko-moltbook/scripts/moltbook.sh"
 CONFIG_PATH="/root/.openclaw/openclaw.json"
 CODEX_CONFIG_PATH="/root/.codex/config.toml"
 SERVICE_ENV_PATH="/root/.config/openclaw/openclaw.env"
@@ -132,6 +134,11 @@ done
 for skill in "${FORCED_CLAWHUB_SKILLS[@]}"; do
   ssh "${SSH_OPTS[@]}" "${HOST}" "${CLAWHUB_WRAPPER_DST} install ${skill} --no-input --force || true"
 done
+
+echo "Syncing patched Moltbook helper to ${HOST}..."
+ssh "${SSH_OPTS[@]}" "${HOST}" "mkdir -p /root/.openclaw/skills/joko-moltbook/scripts"
+scp "${SSH_OPTS[@]}" "${MOLTBOOK_HELPER_SRC}" "${HOST}:${MOLTBOOK_HELPER_DST}"
+ssh "${SSH_OPTS[@]}" "${HOST}" "chmod +x ${MOLTBOOK_HELPER_DST}"
 
 echo "Installing Google Drive skill runtime on ${HOST}..."
 ssh "${SSH_OPTS[@]}" "${HOST}" "
