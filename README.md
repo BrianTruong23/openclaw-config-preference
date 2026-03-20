@@ -10,7 +10,8 @@ It is meant to be applied after installing OpenClaw on a VPS so the Telegram bot
 - Switches the main tool profile to `coding`.
 - Sets `tools.exec.security = "full"`.
 - Sets `tools.exec.ask = "off"` for `main` and `coding-agent`.
-- Sets `coding-agent` to the valid OpenClaw model `openrouter/google/gemini-2.5-flash`.
+- Sets the main agent to the free OpenRouter router `openrouter/free`.
+- Sets `coding-agent` to the free OpenAI open-weight model `openai/gpt-oss-120b:free` via OpenRouter.
 - Enables Telegram session-based exec approvals.
 - Installs `gh` (GitHub CLI).
 - Installs `gws` (Google Workspace CLI).
@@ -88,7 +89,8 @@ After bootstrapping, OpenClaw should:
 - be allowed to run elevated commands from Telegram for the configured sender
 - route approval-gated exec prompts back into the Telegram session
 - avoid Codex's interactive repo trust prompt for repos that were pre-trusted
-- run the OpenClaw `coding-agent` on the valid model `openrouter/google/gemini-2.5-flash`
+- run the OpenClaw main agent on `openrouter/free`
+- run the OpenClaw `coding-agent` on `openai/gpt-oss-120b:free`
 - keep raw Codex CLI available as a fallback for trusted repos
 - have `gh` installed and available for GitHub issue/PR workflows
 - have the native `google-drive-docs` skill available through `gdrive-doc`
